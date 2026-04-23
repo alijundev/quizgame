@@ -14,7 +14,7 @@ public class Main {
 
         daftarSoal.add(new SoalPilihanGanda(
                 "Bahasa pemrograman untuk Android adalah?",
-                new String[]{"A. Java", "B. HTML", "C. C", "D. Kotlin"},
+                new String[]{"A. Java", "B. HTML", "C. CSS", "D. C"},
                 'A'));
 
         daftarSoal.add(new SoalPilihanGanda(
@@ -34,17 +34,25 @@ public class Main {
                         "D. Intergrated Program"},
                 'C'));
 
-        int skor = 0;
-
+        // Input nama pemain
         System.out.println("====================================");
         System.out.println("    Selamat datang di Quiz Game!    ");
         System.out.println("====================================");
+
+        System.out.print("Masukkan nama Anda: ");
+        String nama = scanner.nextLine();
+
+        // Membuat objek Pemain
+        Pemain pemain = new Pemain(nama);
+
+        System.out.println("\nHalo, " + pemain.getNama() + "! Quiz akan dimulai.");
+        System.out.println("Total soal: " + daftarSoal.size() + "\n");
 
         // Loop soal
         for (int i = 0; i < daftarSoal.size(); i++) {
             SoalPilihanGanda soal = daftarSoal.get(i);
 
-            System.out.println("\nSoal " + (i + 1) + ": " + soal.getPertanyaan());
+            System.out.println("Soal " + (i + 1) + ": " + soal.getPertanyaan());
 
             for (String pilihan : soal.getPilihan()) {
                 System.out.println(pilihan);
@@ -53,17 +61,20 @@ public class Main {
             System.out.print("Masukkan jawaban Anda (A/B/C/D): ");
             char jawabanUser = scanner.next().toUpperCase().charAt(0);
 
+            pemain.tambahSoalDijawab();
+
             if (jawabanUser == soal.getJawaban()) {
-                System.out.println("Jawaban benar!");
-                skor++;
+                System.out.println("Jawaban benar!\n");
+                pemain.tambahSkor();
             } else {
-                System.out.println("Jawaban salah! Jawaban yang benar adalah: " + soal.getJawaban());
+                System.out.println("Jawaban salah! Jawaban yang benar adalah: " + soal.getJawaban() + "\n");
             }
         }
 
-        System.out.println("\n=========================================");
-        System.out.println("Quiz selesai! Skor Anda: " + skor + "/" + daftarSoal.size());
-        System.out.println("=========================================");
+        // Tampilkan hasil menggunakan class HasilKuis
+        HasilKuis hasil = new HasilKuis(pemain, daftarSoal.size());
+        hasil.tampilkanHasil();
+        hasil.tampilkanPesan();
 
         scanner.close();
     }
